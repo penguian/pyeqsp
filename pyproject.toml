@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyeqsp"
-version = "1.0b1"
+version = "1.0b2"
 description = "Python Equal Area Sphere Partitioning Library"
 readme = "README.md"
 authors = [

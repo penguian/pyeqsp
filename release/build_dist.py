@@ -98,7 +98,10 @@ def main():
 
     try:
         try:
-            run_command([sys.executable, "-m", "build"], "Building distribution")
+            build_cmd = [sys.executable, "-m", "build"]
+            if os.environ.get("OFFLINE") == "1":
+                build_cmd.append("--no-isolation")
+            run_command(build_cmd, "Building distribution")
         except (Exception, SystemExit):  # pragma: no cover
             if not args.keep_on_fail:  # pragma: no cover
                 print(

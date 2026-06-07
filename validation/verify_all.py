@@ -21,6 +21,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -157,6 +158,10 @@ def main():
         )
         print("[DONE] Uninstallation attempted.\n")
 
+    sphinx_build_dir = "_build"
+    if not os.access(str(REPO_ROOT / "doc"), os.W_OK):
+        sphinx_build_dir = os.path.join(tempfile.gettempdir(), "pyeqsp_doc_build")
+
     steps = [
         (
             [
@@ -199,9 +204,25 @@ def main():
             [py, "validation/quality_check.py"],
             "Performance Quality Check",
         ),
-        (["make", "-C", "doc", "doctest"], "Sphinx Doctest"),
         (
-            ["make", "-C", "doc", "html", "SPHINXOPTS=-W"],
+            [
+                "make",
+                "-C",
+                "doc",
+                "doctest",
+                f"BUILDDIR={sphinx_build_dir}",
+            ],
+            "Sphinx Doctest",
+        ),
+        (
+            [
+                "make",
+                "-C",
+                "doc",
+                "html",
+                f"BUILDDIR={sphinx_build_dir}",
+                "SPHINXOPTS=-W",
+            ],
             "Sphinx HTML Build (Zero Warning Policy)",
         ),
         (

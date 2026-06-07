@@ -86,6 +86,12 @@ This roadmap outlines the development phases from the initial beta through the 1
 - [x] **Enhanced Issue Routing**: Clearly partitioned detailed bug reports from general beta testing observations.
 - [x] **Portability Audit**: Added explicit POSIX/Linux caveats for the maintenance environment.
 - [x] **Metadata Sync**: Formally bumped project status to `Development Status :: 4 - Beta` and synchronized version counters (1.0b1).
+### 1.0b2 Open Beta: Accumulating Refinements
+**Released: 2026-06-07** | **Git Tag: release_1_0b2** | **Distribution: PyPI / GitHub**
+
+- [x] **Metadata Sync**: Bumped project version to `1.0b2` and synchronized version counters across all documentation and project headers.
+- [x] **Maintenance Guide Expansion**: Formalize the "Technical Rationale" for the Defense in Depth strategy, detailing the local/remote distinction for Git hooks and security implications.
+- [x] **Accumulating Changes**: Track community feedback and bug fixes for the next beta release.
 
 ### 1.0 General Release [PLANNED]
 

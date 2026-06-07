@@ -75,6 +75,15 @@ PyEQSP employs a three-tier **"Defense in Depth"** strategy to ensure project-wi
 
 This layered approach is complemented by **Project-Specific Guardrails** that enforce research integrity (e.g., bibliographic consistency, manifold naming, and positional-only argument audits).
 
+#### Technical Rationale: Local vs. Remote Hooks and Security Implications
+
+The distinction between local and remote verification is fundamental to securing the release lifecycle and preserving repository integrity:
+
+1.  **Local Pre-commit Hooks (Layer 1)**: Executed client-side, these hooks catch simple syntax, style, and formatting issues early. However, they are not security boundaries; developers can bypass local hooks (e.g., using `git commit --no-verify`), and local environments can be inconsistent (e.g., different dependency versions or local system configurations).
+2.  **Authoritative Remote CI (Layer 3)**: Executed in a standardized, isolated virtual environment, the CI pipeline acts as the final gatekeeper. Because the CI configuration is checked into version control, it cannot be bypassed, and it ensures uniform environment execution.
+3.  **Security Boundaries and Production Credentials**: Crucially, production credentials and API keys (such as PyPI tokens or SourceForge SSH keys) are never exposed to local hooks or arbitrary PR runners. Local scripts (like `upload_sourceforge.py` and `upload_release.py`) are deliberately designed to run on a maintainer's local machine using local credentials or prompts, ensuring that secrets never propagate to or reside in the shared remote CI environment.
+
+
 ### Maintenance Scripts Inventory
 
 | Script | Location | Purpose |

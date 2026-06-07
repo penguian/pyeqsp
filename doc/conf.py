@@ -64,6 +64,10 @@ intersphinx_mapping = {
     "matplotlib": ("https://matplotlib.org/stable", None),
 }
 
+# Disable Intersphinx in offline/sandbox environments to prevent network warnings
+if os.environ.get("OFFLINE") == "1":
+    intersphinx_mapping = {}
+
 # Nitpick ignore patterns for common scientific docstring labels
 # that aren't real classes.
 nitpick_ignore = [
