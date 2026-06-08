@@ -96,7 +96,7 @@ pre-commit install
 
 ## 2. Installation via Pip
 
-Because **PyEQSP** is currently in beta (pre-release status), you must specify the `--pre` flag to install it from PyPI:
+Because the current PyPI releases of **PyEQSP** are beta pre-releases, install with the `--pre` flag (this will not be necessary once a stable 1.0.0+ release is published):
 
 ```bash
 pip install --pre pyeqsp

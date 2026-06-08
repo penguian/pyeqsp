@@ -11,8 +11,9 @@ Orchestrates the clean-build-check cycle for PyEQSP distribution.
 Exits non-zero if any step fails.
 
 Environment Variables:
-    PYEQSP_OFFLINE: Set to "1" to build offline. This appends "--no-isolation"
-                    to prevent `build` from attempting to download dependencies.
+    PYEQSP_OFFLINE: Set to "1" to disable build isolation (adds "--no-isolation").
+                    Useful in offline/air-gapped environments to avoid
+                    `build` attempting to download build dependencies.
 
 Usage:
     python release/build_dist.py

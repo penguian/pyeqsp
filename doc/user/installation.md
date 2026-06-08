@@ -6,7 +6,7 @@ PyEQSP requires Python 3.11 or later. We recommend using a virtual environment t
 
 ## Basic Installation
 
-The easiest way to install **PyEQSP** is via `pip` from PyPI. Because PyEQSP is currently in beta (pre-release status), you must specify the `--pre` flag:
+The easiest way to install **PyEQSP** is via `pip` from PyPI. Because the current PyPI releases are beta pre-releases, you must specify the `--pre` flag:
 
 ```bash
 pip install --pre pyeqsp
