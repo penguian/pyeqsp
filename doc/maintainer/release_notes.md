@@ -1,5 +1,23 @@
 # Appendix G: Historical Release Notes
 
+## 1.0b2
+**2026-06-07**
+
+Release **1.0b2** is a continuation of the Open Beta phase, accumulating fixes and refinements from community feedback.
+
+### Key Changes
+- **Metadata Sync**: Bumped project version to `1.0b2` and synchronized version counters across all documentation and project headers.
+- **Installation Instructions**: Updated installation documentation (`INSTALL.md` and `doc/user/installation.md`) to explicitly guide users to use the `--pre` flag for pip installations during pre-release phases (Issue #30).
+- **Maintenance Guide**: Formalized the "Technical Rationale" for the Defense in Depth strategy in `doc/maintenance_guide.md`, detailing the local/remote distinction for Git hooks and credential security.
+
+### Release Metadata
+- **Version**: 1.0b2
+- **Tag**: `release_1_0b2`
+- **Distribution**: PyPI / GitHub
+- **Verification**: [PASSED] 100% Project-wide Coverage, 0 Ruff errors, 0 Sphinx warnings.
+
+---
+
 This document tracks the internal evolution of the PyEQSP maintenance ecosystem, including changes to CI/CD pipelines, release scripts, and historical quality metrics. For user-facing feature changes, see the [CHANGELOG.md](https://github.com/penguian/pyeqsp/blob/main/CHANGELOG.md).
 
 ## 1.0b1

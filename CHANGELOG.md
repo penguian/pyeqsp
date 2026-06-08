@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0b2] - 2026-06-07
+**Git Tag**: `release_1_0b2` | **Distribution**: `PyPI / GitHub`
+
+### Added
+- **Accumulating Changes**: Initial commit for the 1.0b2 release cycle.
+- **Maintenance Guide**: Formalized the "Technical Rationale" for the Defense in Depth strategy in `doc/maintenance_guide.md`, detailing the local/remote distinction for Git hooks and credential security.
+
+### Changed
+- **Metadata Synchronization**: Bumped project version to `1.0b2`.
+- **Installation Instructions**: Updated `INSTALL.md` and `doc/user/installation.md` to explicitly direct users to use the `--pre` flag for pip installations during the pre-release phase (Issue #30).
+
+
 ## [1.0b1] - 2026-04-21
 **Git Tag**: `release_1_0b1` | **Distribution**: `PyPI / GitHub`
 

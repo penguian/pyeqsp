@@ -1,6 +1,6 @@
 # PyEQSP: Python Equal Area Sphere Partitioning Library
 
-**Release 1.0b1** (2026-04-21): Copyright 2026 Paul Leopardi
+**Release 1.0b2** (2026-06-07): Copyright 2026 Paul Leopardi
 
 # Installation
 
@@ -96,21 +96,16 @@ pre-commit install
 
 ## 2. Installation via Pip
 
-If the package is available on PyPI or a package repository, you
-can install it directly:
+Because the current PyPI releases of **PyEQSP** are beta pre-releases, install with the `--pre` flag (this will not be necessary once a stable 1.0.0+ release is published):
 
 ```bash
-pip install pyeqsp
+pip install --pre pyeqsp
 ```
-
-> **Note:** **PyEQSP 1.0b1** is the first public Open Beta release available on **PyPI**.
-> While stabilized for research use, users should expect a "pre-release" status.
-> Version 1.0.0 will be the first stable, non-beta release.
 
 To upgrade an existing installation:
 
 ```bash
-pip install --upgrade pyeqsp
+pip install --upgrade --pre pyeqsp
 ```
 
 ## Verification
