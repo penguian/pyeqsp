@@ -26,24 +26,69 @@ except ImportError as exc:  # pragma: no cover
     ) from exc
 
 
+# ---------------------------------------------------------------------------
+# Default Visual Color Palette
+# ---------------------------------------------------------------------------
+RED = (0.9, 0.1, 0.1)  # Center points / glyphs
+GREEN = (0.2, 0.75, 0.4)  # S^2 unit sphere
+BLUE = (0.05, 0.35, 0.8)  # Partition boundary tubes
+SPHERE_OPACITY = 1.0  # Fully opaque
+
+# ---------------------------------------------------------------------------
+# Material Shading Properties
+# ---------------------------------------------------------------------------
+SPHERE_MATERIAL = {
+    "ambient": 0.15,
+    "diffuse": 0.85,
+    "specular": 0.05,
+    "smooth_shading": True,
+}
+
+TUBE_MATERIAL = {
+    "ambient": 0.15,
+    "diffuse": 0.85,
+    "specular": 0.3,
+}
+
+POINT_MATERIAL = {
+    "ambient": 0.12,
+    "diffuse": 0.88,
+    "specular": 0.6,
+    "specular_power": 30,
+}
+
+
 def _get_plotter(plotter=None):
     """
     Return an active PyVista Plotter instance or create a new one.
     """
     if plotter is not None:
         return plotter
-    pl = pv.Plotter(lighting="light_kit")
+    pl = pv.Plotter(lighting="none")
     pl.set_background("white")
+
+    # MATLAB-style camlight right: directional key light from upper-right of camera
+    key_light = pv.Light(light_type="camera light")
+    key_light.position = (1.5, 1.0, 1.5)
+    key_light.intensity = 1.0
+    pl.add_light(key_light)
+
+    # Soft fill light from opposite angle to prevent harsh pitch-black shadow
+    fill_light = pv.Light(light_type="camera light")
+    fill_light.position = (-1.0, -0.5, 0.5)
+    fill_light.intensity = 0.2
+    pl.add_light(fill_light)
+
     return pl
 
 
-def show_s2_sphere(opacity=0.95, color=(0.1, 0.85, 0.3), plotter=None):
+def show_s2_sphere(opacity=SPHERE_OPACITY, color=GREEN, plotter=None):
     """
     Illustrate the unit sphere S^2.
     """
     pl = _get_plotter(plotter)
     sphere = pv.Sphere(radius=1.0, theta_resolution=60, phi_resolution=60)
-    pl.add_mesh(sphere, color=color, opacity=opacity, ambient=0.5, smooth_shading=True)
+    pl.add_mesh(sphere, color=color, opacity=opacity, **SPHERE_MATERIAL)
     return pl
 
 
@@ -52,7 +97,7 @@ def show_r3_point_set(
     *,
     show_sphere=False,
     scale_factor=None,
-    color=(1.0, 0.0, 0.0),
+    color=RED,
     opacity=1.0,
     save_file=None,
     plotter=None,
@@ -72,7 +117,7 @@ def show_r3_point_set(
     poly = pv.PolyData(points.T)
     glyphs = poly.glyph(geom=pv.Sphere(radius=scale_factor), scale=False, orient=False)
     glyphs.active_scalars_name = None
-    pl.add_mesh(glyphs, color=color, opacity=opacity, ambient=0.5, **kwargs)
+    pl.add_mesh(glyphs, color=color, opacity=opacity, **POINT_MATERIAL, **kwargs)
 
     if save_file:
         pl.screenshot(save_file)
@@ -123,7 +168,7 @@ def show_s2_region(region, N, fidelity=32, opacity=1.0, plotter=None):
         )
         poly.lines = lines
         tube = poly.tube(radius=r)
-        pl.add_mesh(tube, color=(0, 0.4, 0.9), opacity=opacity, ambient=0.5)
+        pl.add_mesh(tube, color=BLUE, opacity=opacity, **TUBE_MATERIAL)
     return pl
 
 
@@ -133,6 +178,7 @@ def show_s2_partition(
     extra_offset=False,
     show_points=True,
     show_sphere=True,
+    sphere_opacity=SPHERE_OPACITY,
     title="long",
     title_pos=(0.25, 0.90),
     show=True,
@@ -152,6 +198,8 @@ def show_s2_partition(
         Show centre points. Default True.
     show_sphere : bool, optional
         Show unit sphere. Default True.
+    sphere_opacity : float, optional
+        Opacity of the unit sphere. Default SPHERE_OPACITY (1.0).
     title : str, optional
         Title text. Special values: 'long', 'short', 'none'. Default 'long'.
         'long' uses a multi-line description matching MATLAB.
@@ -208,7 +256,7 @@ def show_s2_partition(
     pl = _get_plotter(plotter)
 
     if show_sphere:
-        show_s2_sphere(opacity=0.95, plotter=pl)
+        show_s2_sphere(opacity=sphere_opacity, plotter=pl)
 
     R = eq_regions(2, N, extra_offset)
     for i in range(N - 1, 0, -1):
@@ -237,7 +285,7 @@ def project_point_set(
     *,
     proj="stereo",
     scale_factor=None,
-    color=(1.0, 0.0, 0.0),
+    color=RED,
     show=True,
     save_file=None,
     plotter=None,
@@ -256,7 +304,7 @@ def project_point_set(
     scale_factor : float, optional
         Scale factor for points. Default None (dynamically calculated as 0.4 / sqrt(N)).
     color : tuple, optional
-        Colour of points in RGB format (0 to 1). Default (1, 0, 0).
+        Colour of points in RGB format (0 to 1). Default RED (0.9, 0.1, 0.1).
     show : bool, optional
         Display rendering window. Default True.
     save_file : str, optional
@@ -312,7 +360,7 @@ def project_point_set(
     poly = pv.PolyData(proj_pts.T)
     glyphs = poly.glyph(geom=pv.Sphere(radius=scale_factor), scale=False, orient=False)
     glyphs.active_scalars_name = None
-    pl.add_mesh(glyphs, color=color, ambient=0.5, **kwargs)
+    pl.add_mesh(glyphs, color=color, **POINT_MATERIAL, **kwargs)
 
     if save_file:
         pl.screenshot(save_file)
@@ -474,7 +522,7 @@ def project_s3_partition(
         project_point_set(
             points,
             proj=proj,
-            color=(1, 0, 0),
+            color=RED,
             scale_factor=0.1,
             show=False,
             plotter=pl,

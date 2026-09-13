@@ -20,7 +20,11 @@ import pyvista as pv
 from scipy.spatial import SphericalVoronoi
 
 import eqsp
-from eqsp.visualizations import show_r3_point_set, show_s2_partition
+from eqsp.visualizations import (
+    TUBE_MATERIAL,
+    show_r3_point_set,
+    show_s2_partition,
+)
 
 
 def main():
@@ -100,7 +104,7 @@ def main():
         )
         poly.lines = lines
         tube = poly.tube(radius=TUBE_R)
-        pl.add_mesh(tube, color=(1.0, 0.6, 0.0), opacity=1.0, ambient=0.5)
+        pl.add_mesh(tube, color=(1.0, 0.6, 0.0), opacity=1.0, **TUBE_MATERIAL)
     # ---------------------------------------------------------------
     # Step 7: Draw the EQ code points (red spheres).
     # ---------------------------------------------------------------
