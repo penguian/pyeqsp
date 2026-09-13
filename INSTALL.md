@@ -35,6 +35,10 @@ Two virtual environment strategies are supported:
 | **`VENV`** | `python3 -m venv VENV` | Standard isolated environment; installs dependencies via PyPI wheels |
 | **`VENV_SYS`** | `python3 -m venv --system-site-packages VENV_SYS` | System-integrated environment; uses system packages (e.g. system VTK) |
 
+In the commands below, `VENV` and `VENV_SYS` are placeholders for your
+virtual environment directory paths. The project convention is to use
+`.venvs/.venv` for `VENV` and `.venvs/.venv_sys` for `VENV_SYS`.
+
 To create and activate a standard virtual environment:
 
 ```bash
@@ -169,12 +173,16 @@ import eqsp
 print(eqsp.__version__)
 ```
 
-You can also run the illustration verification script if you have
-the source code:
+You can also run verification scripts if you have the source code:
 
-```bash
-python tests/src/inspect_illustrations.py
-```
+- **2D Illustrations (Matplotlib)**:
+  ```bash
+  python tests/src/inspect_illustrations.py
+  ```
+- **3D Visualizations (PyVista)**:
+  ```bash
+  python tests/src/inspect_visualizations.py
+  ```
 
 ## Building Documentation
 
