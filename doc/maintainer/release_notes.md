@@ -1,7 +1,7 @@
 # Appendix G: Historical Release Notes
 
 ## 1.0b3
-**2026-08-30**
+**2026-09-16**
 
 Release **1.0b3** completes the migration of the PyEQSP 3D visualization subsystem from Mayavi to PyVista (`pyvista`), resolving cross-platform GUI and Wayland/Fedora Asahi Remix compatibility issues and aligning visualization infrastructure with PyClical and GluCat.
 

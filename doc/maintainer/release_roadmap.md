@@ -94,7 +94,7 @@ This roadmap outlines the development phases from the initial beta through the 1
 - [x] **Accumulating Changes**: Track community feedback and bug fixes for the next beta release.
 
 ### 1.0b3 Open Beta: PyVista Visualization Backend
-**Target: 2026-08-30** | **Git Tag: release_1_0b3** | **Distribution: PyPI / GitHub**
+**Target: 2026-09-16** | **Git Tag: release_1_0b3** | **Distribution: PyPI / GitHub**
 
 - [x] **PyVista Backend Migration**: Replaced Mayavi with PyVista (`pyvista`) for 3D sphere partition rendering and stereographic projections.
 - [x] **Off-Screen Rendering**: Configured PyVista off-screen rendering for headless CI environments, doctests, and Sphinx builds.
