@@ -58,6 +58,20 @@ graph LR
     style Backends fill:#fff3cd,stroke:#ffc107
 ```
 
+### Decoupling and Testing Strategy
+
+The composite strategy deliberately decouples the core numerical partitioning logic
+from heavy optional visualization stacks:
+- **Zero Heavy Runtime Coupling**: Core algorithms and mathematical properties have no
+  dependency on PyVista or VTK.
+- **CI Test Isolation**: Continuous integration runners exercise the visualization
+  layer through mock-based testing (`tests/src/*_mock.py`), validating API contracts,
+  parameter routing, and call configurations without requiring graphics drivers or
+  heavy display stacks.
+- **Maintainer Verification**: Runtime rendering fidelity is verified locally using
+  interactive inspection utilities (`tests/src/inspect_visualizations.py`) and PhD
+  thesis reproduction scripts (`examples/phd-thesis/`).
+
 ## Extensibility
 
 ### Adding New Manifolds

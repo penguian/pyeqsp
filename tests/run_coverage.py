@@ -10,7 +10,6 @@ Usage:
 """
 
 import argparse
-import importlib.util
 import os
 import subprocess
 import sys
@@ -24,6 +23,20 @@ def run_command(cmd, env=None, cwd=None):
     except subprocess.CalledProcessError as e:
         print(f"Error: Command '{' '.join(cmd)}' failed with exit code {e.returncode}")
         sys.exit(e.returncode)
+
+
+def _can_import_pyvista(env=None):
+    """Probe whether pyvista and its backend can be cleanly imported."""
+    try:
+        res = subprocess.run(
+            [sys.executable, "-c", "import pyvista"],
+            env=env,
+            check=False,
+            capture_output=True,
+        )
+        return res.returncode == 0
+    except (subprocess.SubprocessError, OSError):
+        return False
 
 
 def main():
@@ -51,9 +64,10 @@ def main():
     pytest_opts = ["--doctest-modules", "--ignore=eqsp/_private"]
 
     omit_opts = []
-    if importlib.util.find_spec("pyvista") is None:
+    if not _can_import_pyvista(env=env):
         print(
-            "PyVista not found — skipping eqsp/visualizations.py doctests and coverage."
+            "PyVista not importable — skipping "
+            "eqsp/visualizations.py doctests and coverage."
         )
         pytest_opts.append("--ignore=eqsp/visualizations.py")
         omit_opts.append("--omit=eqsp/visualizations.py")

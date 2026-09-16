@@ -117,7 +117,8 @@ def show_r3_point_set(
     poly = pv.PolyData(points.T)
     glyphs = poly.glyph(geom=pv.Sphere(radius=scale_factor), scale=False, orient=False)
     glyphs.active_scalars_name = None
-    pl.add_mesh(glyphs, color=color, opacity=opacity, **POINT_MATERIAL, **kwargs)
+    mesh_kwargs = {**POINT_MATERIAL, **kwargs}
+    pl.add_mesh(glyphs, color=color, opacity=opacity, **mesh_kwargs)
 
     if save_file:
         pl.screenshot(save_file)
@@ -166,7 +167,7 @@ def show_s2_region(region, N, fidelity=32, opacity=1.0, plotter=None):
                 np.arange(1, fidelity),
             ]
         )
-        poly.lines = lines
+        poly.lines = lines.ravel()
         tube = poly.tube(radius=r)
         pl.add_mesh(tube, color=BLUE, opacity=opacity, **TUBE_MATERIAL)
     return pl
@@ -357,10 +358,17 @@ def project_point_set(
     else:
         proj_pts = t[:3, :]
 
-    poly = pv.PolyData(proj_pts.T)
-    glyphs = poly.glyph(geom=pv.Sphere(radius=scale_factor), scale=False, orient=False)
-    glyphs.active_scalars_name = None
-    pl.add_mesh(glyphs, color=color, **POINT_MATERIAL, **kwargs)
+    finite_mask = np.all(np.isfinite(proj_pts), axis=0)
+    proj_pts = proj_pts[:, finite_mask]
+
+    if proj_pts.shape[1] > 0:
+        poly = pv.PolyData(proj_pts.T)
+        glyphs = poly.glyph(
+            geom=pv.Sphere(radius=scale_factor), scale=False, orient=False
+        )
+        glyphs.active_scalars_name = None
+        mesh_kwargs = {**POINT_MATERIAL, **kwargs}
+        pl.add_mesh(glyphs, color=color, **mesh_kwargs)
 
     if save_file:
         pl.screenshot(save_file)

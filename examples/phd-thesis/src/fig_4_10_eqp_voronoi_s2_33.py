@@ -102,7 +102,7 @@ def main():
                 np.arange(1, len(arc)),
             ]
         )
-        poly.lines = lines
+        poly.lines = lines.ravel()
         tube = poly.tube(radius=TUBE_R)
         pl.add_mesh(tube, color=(1.0, 0.6, 0.0), opacity=1.0, **TUBE_MATERIAL)
     # ---------------------------------------------------------------

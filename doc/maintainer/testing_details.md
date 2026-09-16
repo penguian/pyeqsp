@@ -14,6 +14,9 @@ The `eqsp` package uses a **Hybrid Testing Approach** that integrates standard u
 2.  **Mock Tests (`tests/src/*_mock.py`)**:
     *   Verify library interaction (e.g., PyVista/Matplotlib) without needing a display.
     *   Check if the correct arguments are passed to the plotting engines.
+    *   Enable continuous integration runners to validate visualization API
+        contracts and coverage without installing heavy native GUI or 3D
+        rendering libraries (such as VTK).
 3.  **Extra Tests (`tests/src/*_extra.py`)**:
     *   Introspective integration tests.
     *   Use non-interactive backends (like Matplotlib's `Agg`) to verify that the rendered plot objects contain the expected mathematical labels and data properties.
@@ -57,7 +60,15 @@ We use a two-tier automated verification system:
 2.  **Unified Verification Script (Global)**: The `verify_all.py` script (located in `validation/`) is the definitive project-wide entry point.
     *   **Pull Requests**: Every PR must pass all pre-commit hooks and `python3 validation/verify_all.py` (Ruff, Pylint, Pytest).
     *   **Environment Orchestration**: Use `--venv DIR` to activate a specific environment and `--uninstall` to remove any existing `pyeqsp` package before running the suite. This prevents local source shadowing by stale `site-packages`.
-    *   **CI Pipeline**: GitHub Actions runs `validation/verify_all.py` across Python 3.11–3.13.
+    *   **CI Pipeline**: GitHub Actions runs `validation/verify_all.py` across
+        Python 3.11–3.13. The CI workflow intentionally installs only core
+        and documentation dependencies (`.[dev,docs]`), excluding optional
+        3D visualization extras (`[pyvista]`). This keeps CI runs fast,
+        deterministic, and free of platform-dependent VTK wheel binaries or
+        headless X11/EGL display server requirements. Full end-to-end 3D
+        rendering is verified through maintainer-side interactive tools
+        (`tests/src/inspect_visualizations.py`) and thesis figure reproduction
+        scripts (`examples/phd-thesis/`) in environments equipped with PyVista.
 
 The orchestrated script enforces a **Zero-Warning Policy** for the Sphinx documentation build (`make html SPHINXOPTS="-W"`), ensuring that no orphaned pages or malformed Table of Contents entries reach production.
 

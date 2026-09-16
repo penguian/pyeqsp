@@ -4,7 +4,7 @@ PyEQSP Tests: Visualizations (Mock features)
 Copyright Paul Leopardi 2026
 """
 
-# pylint: disable=import-outside-toplevel
+# pylint: disable=import-outside-toplevel,unused-import
 
 import doctest
 import sys
@@ -12,6 +12,10 @@ import unittest
 from unittest.mock import MagicMock, call, patch
 
 import numpy as np
+
+# Pre-import scipy so patch.dict(sys.modules) in test cases does not evict C-extensions
+# like _pocketfft_umath, preventing single-phase re-import failures in Python 3.13.
+import scipy.optimize  # noqa: F401
 
 
 def test_doctests():
@@ -117,6 +121,14 @@ class TestShowR3PointSet(TestVisualizationsSetup):
         vis = self._import_vis()
         pl = vis.show_r3_point_set(self._points(), save_file="out.png")
         pl.screenshot.assert_called_once_with("out.png")
+
+    def test_material_kwargs_override(self):
+        """Test that custom material kwargs override default POINT_MATERIAL."""
+        vis = self._import_vis()
+        pl = vis.show_r3_point_set(self._points(), ambient=0.4, specular=0.5)
+        _, kwargs = pl.add_mesh.call_args
+        self.assertEqual(kwargs["ambient"], 0.4)
+        self.assertEqual(kwargs["specular"], 0.5)
 
 
 # ---------------------------------------------------------------------------
@@ -260,6 +272,32 @@ class TestProjectPointSet(TestVisualizationsSetup):
             np.eye(3), proj="stereo", show=False, save_file="pts.png"
         )
         pl.screenshot.assert_called_once_with("pts.png")
+
+    def test_material_kwargs_override(self):
+        """Test that custom material kwargs override default POINT_MATERIAL."""
+        vis = self._import_vis()
+        pl = vis.project_point_set(
+            np.eye(3), proj="stereo", show=False, ambient=0.4, specular=0.5
+        )
+        _, kwargs = pl.add_mesh.call_args
+        self.assertEqual(kwargs["ambient"], 0.4)
+        self.assertEqual(kwargs["specular"], 0.5)
+
+    def test_stereo_projection_with_north_pole_filters_nans(self):
+        """Test that stereographic projection filters NaN at north pole."""
+        vis = self._import_vis()
+        pts = np.array([[0, 0, 1], [0, 0, -1]], dtype=float).T
+        pl = vis.project_point_set(pts, proj="stereo", show=False)
+        pl.add_mesh.assert_called_once()
+        poly_data_arg = vis.pv.PolyData.call_args[0][0]
+        self.assertEqual(poly_data_arg.shape, (1, 3))
+
+    def test_all_nans_skips_add_mesh(self):
+        """Test that when all points project to NaN, add_mesh is skipped."""
+        vis = self._import_vis()
+        north_pole = np.array([[0], [0], [1]], dtype=float)
+        pl = vis.project_point_set(north_pole, proj="stereo", show=False)
+        pl.add_mesh.assert_not_called()
 
 
 # ---------------------------------------------------------------------------
