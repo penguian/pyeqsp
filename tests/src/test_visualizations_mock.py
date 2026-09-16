@@ -9,7 +9,7 @@ Copyright Paul Leopardi 2026
 import doctest
 import sys
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 
 import numpy as np
 
@@ -17,6 +17,7 @@ import numpy as np
 def test_doctests():
     """Test function test_doctests."""
     mock_pv = MagicMock()
+    mock_pv.OFF_SCREEN = True
     mock_plotter = MagicMock()
     mock_plotter.window_size = (1024, 768)
     mock_pv.Plotter.return_value = mock_plotter
@@ -99,10 +100,17 @@ class TestShowR3PointSet(TestVisualizationsSetup):
         pl.add_mesh.assert_called_once()
 
     def test_show_sphere_calls_sphere(self):
-        """Test function test_show_sphere_calls_sphere."""
+        """Test that show_sphere=True renders the unit sphere."""
         vis = self._import_vis()
+        vis.show_r3_point_set(self._points(), show_sphere=False)
+        self.assertNotIn(
+            call(radius=1.0, theta_resolution=60, phi_resolution=60),
+            vis.pv.Sphere.call_args_list,
+        )
         vis.show_r3_point_set(self._points(), show_sphere=True)
-        self.assertTrue(vis.pv.Sphere.called)
+        vis.pv.Sphere.assert_any_call(
+            radius=1.0, theta_resolution=60, phi_resolution=60
+        )
 
     def test_save_file_calls_screenshot(self):
         """Test function test_save_file_calls_screenshot."""
