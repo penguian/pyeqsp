@@ -13,7 +13,10 @@ Core library dependencies (installed automatically via `pip`):
 - `numpy`
 - `scipy`
 - `matplotlib`
-- `pyvista` (optional, for 3D interactive visualizations)
+
+Optional dependencies:
+- `pyvista` (for 3D interactive visualizations; install via
+  `pip install 'pyeqsp[pyvista]'`)
 
 ## Virtual Environment Setup
 

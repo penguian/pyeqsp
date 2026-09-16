@@ -449,7 +449,7 @@ def project_s3_partition(
     else:
         show_title = True
         if title == "long":
-            proj_name = "Stereographic" if proj == "stereo" else "Equal volume"
+            proj_name = "Stereographic" if proj == "stereo" else "Equal area"
             point_str = (
                 ", showing the center point of each region." if show_points else "."
             )

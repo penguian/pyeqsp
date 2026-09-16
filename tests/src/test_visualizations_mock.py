@@ -175,6 +175,27 @@ class TestShowS2Partition(TestVisualizationsSetup):
         pl = vis.show_s2_partition(4, show=False, save_file="snap.png")
         pl.screenshot.assert_called_once_with("snap.png")
 
+    def test_show_true_calls_show_when_interactive(self):
+        """Test that show=True calls pl.show() when OFF_SCREEN is False."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = False
+        pl = vis.show_s2_partition(4, show=True)
+        pl.show.assert_called_once()
+
+    def test_show_false_does_not_call_show(self):
+        """Test that show=False does not call pl.show() even when interactive."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = False
+        pl = vis.show_s2_partition(4, show=False)
+        pl.show.assert_not_called()
+
+    def test_show_true_suppressed_when_offscreen(self):
+        """Test that show=True suppresses pl.show() when OFF_SCREEN is True."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = True
+        pl = vis.show_s2_partition(4, show=True)
+        pl.show.assert_not_called()
+
 
 # ---------------------------------------------------------------------------
 # project_point_set
@@ -217,6 +238,28 @@ class TestProjectPointSet(TestVisualizationsSetup):
         vis = self._import_vis()
         with self.assertRaises(ValueError):
             vis.project_point_set(np.eye(3), proj="invalid")
+
+    def test_show_true_calls_show_when_interactive(self):
+        """Test that show=True calls pl.show() when OFF_SCREEN is False."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = False
+        pl = vis.project_point_set(np.eye(3), proj="stereo", show=True)
+        pl.show.assert_called_once()
+
+    def test_show_false_does_not_call_show(self):
+        """Test that show=False does not call pl.show()."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = False
+        pl = vis.project_point_set(np.eye(3), proj="stereo", show=False)
+        pl.show.assert_not_called()
+
+    def test_save_file_calls_screenshot(self):
+        """Test function test_save_file_calls_screenshot."""
+        vis = self._import_vis()
+        pl = vis.project_point_set(
+            np.eye(3), proj="stereo", show=False, save_file="pts.png"
+        )
+        pl.screenshot.assert_called_once_with("pts.png")
 
 
 # ---------------------------------------------------------------------------
@@ -261,6 +304,27 @@ class TestProjectS3Partition(TestVisualizationsSetup):
         pl_short.add_text.reset_mock()
         pl_none = vis.project_s3_partition(4, title="none", show=False)
         self.assertFalse(pl_none.add_text.called)
+
+    def test_title_eqarea_projection(self):
+        """Test that proj='eqarea' uses 'Equal area' in long title."""
+        vis = self._import_vis()
+        pl = vis.project_s3_partition(4, proj="eqarea", title="long", show=False)
+        self.assertTrue(pl.add_text.called)
+        self.assertIn("Equal area", pl.add_text.call_args[0][0])
+
+    def test_show_true_calls_show_when_interactive(self):
+        """Test that show=True calls pl.show() when OFF_SCREEN is False."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = False
+        pl = vis.project_s3_partition(4, show=True)
+        pl.show.assert_called_once()
+
+    def test_show_false_does_not_call_show(self):
+        """Test that show=False does not call pl.show()."""
+        vis = self._import_vis()
+        self.mock_pv.OFF_SCREEN = False
+        pl = vis.project_s3_partition(4, show=False)
+        pl.show.assert_not_called()
 
     def test_show_s2_partition_rejects_invalid_kwargs(self):
         """Test that show_s2_partition rejects unexpected keyword arguments."""

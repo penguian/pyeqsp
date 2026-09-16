@@ -12,13 +12,14 @@ the Python Equal Area Sphere Partitioning Library.
 -   Python 3.11 or later
 -   `pip` (Python package installer)
 
-The package depends on:
+Core library dependencies (installed automatically via `pip`):
 -   `numpy`
 -   `scipy`
 -   `matplotlib`
--   `pyvista` (optional)
 
-Installing **PyEQSP** via `pip` automatically installs these dependencies.
+Optional dependencies:
+-   `pyvista` (required for 3D visualization; install via
+    `pip install 'pyeqsp[pyvista]'`)
 
 ### Python Virtual Environments
 
